@@ -57,11 +57,21 @@ while(choice != 4):
 		name = input('Nome do eletrônico: ')
 		if(name == 'return'):
 			break
-		power = math.ceil(float(input('Potência (em W):'))*100)/100
-		power = power/1000
-		use_hours = float(input('Uso por dia (em horas):'))
-		energy_spent = float(math.ceil(power*(use_hours*31)*100)/100)
-		print()
+		while(choice != '1' and choice != '2'):
+			choice = input('Qual a medida do valor que aparece no eletrônico?\n1- W\n2- kW/h\n')
+			if(choice != '1' and choice != '2'):
+				print('insira uma opção válida.\n\n')
+		
+		if(choice == '1'):
+			power = math.ceil(float(input('Potência (em W):'))*100)/100
+			power = power/1000
+			use_hours = float(input('Uso por dia (em horas):'))
+			energy_spent = float(math.ceil(power*(use_hours*31)*100)/100)
+		elif(choice == '2'):
+			energy_spent = (math.ceil(float(input('Gasto energético (em kW/h):'))*100)/100)
+			use_hours = float(input('Uso por dia (em horas):'))
+			power = float(math.ceil((energy_spent/(use_hours*31))*100)/100)
+
 		print('Nome:            ', name)
 		print('Potência:        ', power, 'kW')
 		print('Uso/dia:         ', use_hours, 'horas')
