@@ -4,6 +4,7 @@
 
 import math
 import os
+from controller import getLimitedInput
 
 choice = 0
 if(input('load save?(y/n) ') == 'y'):
@@ -24,20 +25,20 @@ else:
 while(choice != 4):
 	os.system('cls')
 	#Menu
-	print(
-		'------Cálculo de gasto de energia por mês------\n'+
-		'Taxa atual: '+str(energy_tax)+'\n'
-		'0 - Atualizar taxa de energia.\n'
-		'1 - Listar eletrônicos já cadastrados.\n'
-		'2 - Cadastrar eletrônico.\n'
-		'3 - Remover eletrônico.\n'
-		'4 - Sair.'
-	)
-	choice = int(input())
+	choice = int(getLimitedInput(
+		"------Cálculo de gasto de energia por mês------\n"+
+		"Taxa atual: "+str(energy_tax)+"\n"
+		"0 - Atualizar taxa de energia.\n"
+		"1 - Listar eletrônicos já cadastrados.\n"
+		"2 - Cadastrar eletrônico.\n"
+		"3 - Remover eletrônico.\n"
+		"4 - Sair.\n", 
+		['0', '1', '2', '3', '4'], ''
+	))
 	os.system('cls')
 
 	if(choice == 0):
-		from update_energy_tax import update_energy_tax
+		from controller import update_energy_tax
 		energy_tax = update_energy_tax(energy_tax)
 
 	elif(choice == 1):
@@ -56,11 +57,9 @@ while(choice != 4):
 	elif(choice == 2):
 		name = input('Nome do eletrônico: ')
 		if(name == 'return'):
-			break
-		while(choice != '1' and choice != '2'):
-			choice = input('Qual a medida do valor que aparece no eletrônico?\n1- W\n2- kW/h\n')
-			if(choice != '1' and choice != '2'):
-				print('insira uma opção válida.\n\n')
+			continue
+
+		choice = getLimitedInput("Qual a medida do valor que aparece no eletrônico?\n1- W\n2- kW/h\n", ['1', '2'])
 		
 		if(choice == '1'):
 			power = math.ceil(float(input('Potência (em W):'))*100)/100
@@ -72,11 +71,12 @@ while(choice != 4):
 			use_hours = float(input('Uso por dia (em horas):'))
 			power = float(math.ceil((energy_spent/(use_hours*31))*100)/100)
 
-		print('Nome:            ', name)
-		print('Potência:        ', power, 'kW')
-		print('Uso/dia:         ', use_hours, 'horas')
-		print('Gasto energético:', energy_spent, 'kW/h')
-		print()
+		print(
+			 "Nome:            "+name+"\n"
+			+"Potência:        "+power+"kW"+"\n"
+			+"Uso/dia:         "+use_hours+"horas"+"\n"
+			+"Gasto energético:"+energy_spent+"kW/h"+"\n"
+		)
 		while(choice != 's' and choice != 'n'):
 			choice = input('Confirmar? (s/n): ')
 			if(choice == 's'):
@@ -98,14 +98,8 @@ while(choice != 4):
 		file = open('./save.py', 'w', encoding='utf8')
 		file.write('content = '+str(devices)+'\nenergy_tax = '+str(energy_tax))
 		file.close()
-	else:
-		print('Escolha uma opção válida.')
 	
 	print('\n')
-
-
-
-
 
 
 # potencia = float(input('Potencia (em W):'))
